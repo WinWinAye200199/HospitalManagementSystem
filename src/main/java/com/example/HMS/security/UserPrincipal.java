@@ -17,26 +17,28 @@ import lombok.Setter;
 public class UserPrincipal implements UserDetails{
 
 	private static final long serialVersionUID = 1L;
-	private long id;
+	private Long id;
 	private String name;
 	private String email;
 	private String phone;
+	private String address;
 	private String password;
 	private Collection<? extends GrantedAuthority> authorities;
 	
-	public UserPrincipal(Long id, String name, String email, String phone, String password,
+	public UserPrincipal(Long id, String name, String email, String phone, String address, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
+		this.address = address;
 		this.password = password;
 		this.authorities = authorities;
 	}
 	
 	public static UserPrincipal build(User user) {
 		GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + user.getRole().name());
-		return new UserPrincipal(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getPassword(), List.of(authority));
+		return new UserPrincipal(user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.getPassword(), List.of(authority));
 	}
 
 	@Override

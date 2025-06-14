@@ -43,6 +43,14 @@ public class AuthController {
 
 	@PostMapping("/signup")
 	public ApiResponse signUp(@RequestBody UserRequest userRequest) {
+		 if (!userRequest.getPassword().equals(userRequest.getConfirmedPassword())) {
+	            return new ApiResponse(false, "Passwords do not match");
+	        }
+
+	        if (userService.findByEmail(userRequest.getEmail()).isPresent()) {
+	            return new ApiResponse(false, "Email already exists");
+	        }
+
 		ApiResponse savedUser = userService.createUser(userRequest);
 		
 		return savedUser;

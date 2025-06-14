@@ -2,13 +2,15 @@ package com.example.HMS.model.request;
 
 import javax.validation.constraints.NotBlank;
 
+import com.example.HMS.model.entities.Role;
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @NotBlank
-public class UserRequest {
+public class StaffRequest {
 
 	private String name;
 	private String email;
@@ -16,5 +18,9 @@ public class UserRequest {
 	private String address;
 	private String password;
 	private String confirmedPassword; 
-
+	private Role role; // Either ADMIN or STAFF
+	
+    private String specialization;
+    private String department;
+   
 }

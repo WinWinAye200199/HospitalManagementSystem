@@ -58,8 +58,11 @@ public class WebSecurityConfig {
 	            .antMatchers(HttpMethod.POST, "/api/auth/signup").permitAll() // Permission for signup
 	            .antMatchers(HttpMethod.PUT, "/api/auth/reset-password").permitAll()
 	            .antMatchers(HttpMethod.POST, "/api/auth/request-reset-password").permitAll()
-	            .antMatchers("/api/users/**").hasAnyRole("USER","ADMIN")
+	            .antMatchers("/api/users/**").hasAnyRole("USER","ADMIN","STAFF")
 	            .antMatchers("/api/admin/**").hasRole("ADMIN")
+	            .antMatchers("/api/doctors/**").hasRole("DOCTOR")
+	            .antMatchers("/api/nurses/**").hasRole("NURSE")
+	            .antMatchers("/api/staffs/**").hasRole("STAFF")
 	            .anyRequest().authenticated());
 	    http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

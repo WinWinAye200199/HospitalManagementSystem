@@ -8,13 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NotBlank
-public class UserRequest {
-
+public class UpdateStaffRequest {
 	private String name;
 	private String email;
 	private String phone;
 	private String address;
-	private String password;
-	private String confirmedPassword; 
-
+	
+    private String specialization;
+    private String department;
 }

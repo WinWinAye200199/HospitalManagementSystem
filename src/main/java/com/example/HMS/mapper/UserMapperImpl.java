@@ -21,6 +21,7 @@ public class UserMapperImpl implements UserMapper{
 
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
+        userDto.setActive(user.isActive());
         userDto.setName(user.getName());
         userDto.setEmail(user.getEmail());
         userDto.setPhone(user.getPhone());
@@ -48,6 +49,7 @@ public class UserMapperImpl implements UserMapper{
 
         UserResponse userResponse = new UserResponse();
         userResponse.setId(userDto.getId());
+        userResponse.setActive(userDto.isActive());
         userResponse.setName(userDto.getName());
         userResponse.setEmail(userDto.getEmail());
         userResponse.setPhone(userDto.getPhone());

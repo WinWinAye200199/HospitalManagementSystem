@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
             // Extract role
             String role = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
-                    .filter(auth -> auth.equals("ROLE_ADMIN") || auth.equals("ROLE_USER"))
+                    .filter(auth -> auth.equals("ROLE_ADMIN") || auth.equals("ROLE_USER")|| auth.equals("ROLE_DOCTOR") || auth.equals("ROLE_NURSE") || auth.equals("ROLE_STAFF"))
                     .findFirst()
                     .orElseThrow(() -> new UnauthorizedException("User role not found!"));
 
