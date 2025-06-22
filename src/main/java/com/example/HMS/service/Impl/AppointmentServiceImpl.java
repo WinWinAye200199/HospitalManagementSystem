@@ -44,8 +44,6 @@ public class AppointmentServiceImpl implements AppointmentService{
 	private final DoctorScheduleRepository doctorScheduleRepository;
 	
 	private final EmailService emailService;
-	
-	private final PaymentRepository paymentRepository;
 
 	@Override
 	public ApiResponse bookAppointment(UserPrincipal currentUser, AppointmentRequest request) {
@@ -80,6 +78,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 		 }
 
 		 if(patient.getRole() == Role.USER) {
+			 System.out.print("In book Appointment");
 			 Appointment appointment = new Appointment();
 			 
 			 appointment.setPatient(patient);

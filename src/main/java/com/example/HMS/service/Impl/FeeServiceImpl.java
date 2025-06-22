@@ -37,6 +37,7 @@ public class FeeServiceImpl implements FeeService {
     	List<FeeResponse> responses = new ArrayList<>();
     	for(Fee fee : fees) {
     		FeeResponse response = new FeeResponse();
+    		response.setId(fee.getId());
         	response.setName(fee.getName());
         	response.setAmount(fee.getAmount());
         	response.setDescription(fee.getDescription());
@@ -52,7 +53,7 @@ public class FeeServiceImpl implements FeeService {
                 .orElseThrow(() -> new RuntimeException("Fee not found with id " + id));
     	
     	FeeResponse response = new FeeResponse();
-    	
+    	response.setId(fee.getId());
     	response.setName(fee.getName());
     	response.setAmount(fee.getAmount());
     	response.setDescription(fee.getDescription());

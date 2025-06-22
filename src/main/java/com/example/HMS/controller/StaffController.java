@@ -41,13 +41,6 @@ public class StaffController {
 	
 	private final DepartmentService departmentService;
 	
-	@PostMapping("/addDepartment")
-	public ApiResponse saveDepartment(@RequestBody DepartmentRequest request) {
-		
-		ApiResponse apiResponse = departmentService.saveDepartment(request);
-		
-		return apiResponse;
-	}
 	
 	@GetMapping("/viewMedicalRecord")
 	public List<MedicalRecordResponse> getAllMedicalRecords(){
@@ -61,7 +54,7 @@ public class StaffController {
 		return response;
 	}
 	
-	@GetMapping("/viewAllAppointment")
+	@GetMapping("/viewAllAppointments")
 	public List<AppointmentResposne> getAllAppointment(){
 		List<AppointmentResposne> responses = appointmentService.getAllAppointments();
 		return responses;

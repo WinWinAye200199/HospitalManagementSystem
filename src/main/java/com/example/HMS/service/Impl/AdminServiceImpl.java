@@ -124,37 +124,42 @@ public class AdminServiceImpl implements AdminService{
 
 	@Override
 	public ApiResponse updateStaff(Long id, UpdateStaffRequest request) {
-		User foundUser = userRepository.getById(id);
-		if(foundUser == null) {
-			return new ApiResponse(false, "User Not Found!!");
-		}else {
-			if(foundUser.getRole() == Role.USER || 
-				    foundUser.getRole() == Role.NURSE || 
-				    foundUser.getRole() == Role.STAFF) {
-				foundUser.setName(request.getName());
-				foundUser.setAddress(request.getAddress());
-				foundUser.setEmail(request.getEmail());
-				foundUser.setPhone(request.getPhone());
-				
-				userRepository.save(foundUser);
-				return new ApiResponse(true, "Update information Successfully!");
-			}else if(foundUser.getRole() == Role.DOCTOR){
-				foundUser.setName(request.getName());
-				foundUser.setAddress(request.getAddress());
-				foundUser.setEmail(request.getEmail());
-				foundUser.setPhone(request.getPhone());
-				
-				userRepository.save(foundUser);
-				
-				doctorService.updateDoctor(id, request);
-				
-				return new ApiResponse(true, "Update information Successfully!");
-				
-			}
-			return new ApiResponse(false, "Fail to Update Information!");
-		}
-		
-		
+		User foundUser = userRepository.findById(id).orElse(null);
+	    
+	    if (foundUser == null) {
+	        return new ApiResponse(false, "User Not Found!!");
+	    }
+
+	    // ✅ Only check and set email if it's different
+	    String newEmail = request.getEmail();
+	    if (newEmail != null && !newEmail.equals(foundUser.getEmail())) {
+//	        User userWithEmail = userRepository.findByEmail(newEmail)
+//	        		.orElseThrow(() -> new RuntimeException("Doctor not found with email: " + newEmail));
+//	        if (userWithEmail != null && !userWithEmail.getId().equals(foundUser.getId())) {
+//	            return new ApiResponse(false, "Email already exists!");
+//	        }
+	    	 // ✅ Update other fields
+		    foundUser.setName(request.getName());
+		    foundUser.setAddress(request.getAddress());
+		    foundUser.setPhone(request.getPhone());
+
+		    userRepository.save(foundUser);
+	    }else {
+	        foundUser.setEmail(newEmail);
+	        // ✅ Update other fields
+		    foundUser.setName(request.getName());
+		    foundUser.setAddress(request.getAddress());
+		    foundUser.setPhone(request.getPhone());
+
+		    userRepository.save(foundUser);
+	    }
+
+	    // ✅ Update doctor info if applicable
+	    if (foundUser.getRole() == Role.DOCTOR) {
+	        doctorService.updateDoctor(id, request);
+	    }
+
+	    return new ApiResponse(true, "Update information Successfully!");
 	}
 
 	@Override

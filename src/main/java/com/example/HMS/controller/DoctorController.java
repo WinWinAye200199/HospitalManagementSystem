@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.HMS.dto.UserDto;
 import com.example.HMS.model.request.MedicalRecordRequest;
 import com.example.HMS.model.response.ApiResponse;
 import com.example.HMS.model.response.AppointmentResposne;
@@ -18,6 +19,7 @@ import com.example.HMS.security.CurrentUser;
 import com.example.HMS.security.UserPrincipal;
 import com.example.HMS.service.DoctorService;
 import com.example.HMS.service.MedicalRecordService;
+import com.example.HMS.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,12 +30,7 @@ public class DoctorController {
 	
 	private final DoctorService doctorService;
 	private final MedicalRecordService medicalRecordService;
-
-	@GetMapping("/getDoctorInfo")
-	public DoctorInfoResponse getDoctorInfo(@CurrentUser UserPrincipal currentUser) {
-		DoctorInfoResponse response = doctorService.getDoctorInfo(currentUser);
-		return response;
-	}
+	private final UserService userService;
 	
 	@GetMapping("/getDoctorSchedule")
 	public List<DoctorScheduleResponse> getDoctorSchedule(@CurrentUser UserPrincipal currentUser) {
@@ -45,6 +42,12 @@ public class DoctorController {
 	public List<AppointmentResposne> viewAppointment(@CurrentUser UserPrincipal currentUser){
 		List<AppointmentResposne> responses = doctorService.getAllAppointments(currentUser);
 		return responses;
+	}
+	
+	@GetMapping("/patients")
+	public List<UserDto> getAllPatients(){
+		List<UserDto> patients = userService.getAllPatients();
+		return patients;
 	}
 	
 	@PostMapping("/addMedicalRecord")

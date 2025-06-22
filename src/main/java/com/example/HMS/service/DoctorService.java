@@ -12,6 +12,7 @@ import com.example.HMS.model.response.AppointmentResposne;
 import com.example.HMS.model.response.DoctorInfoResponse;
 import com.example.HMS.model.response.DoctorResponse;
 import com.example.HMS.model.response.DoctorScheduleResponse;
+import com.example.HMS.model.response.UserInfoResponse;
 import com.example.HMS.security.UserPrincipal;
 
 public interface DoctorService {
@@ -23,7 +24,7 @@ public interface DoctorService {
 	List<DoctorInfoDTO> getAllDoctors(); 
 	ApiResponse assignNurse(Long id, AssignNurseRequest request);
 	Doctor findByName(String name);
-	DoctorInfoResponse getDoctorInfo(UserPrincipal currentUser);
 	List<DoctorScheduleResponse> getAllDoctorSchedules(UserPrincipal currentUser);
 	List<AppointmentResposne> getAllAppointments(UserPrincipal currentUser);
+	List<DoctorInfoDTO> getDoctorsWithDepartment(String department);
 }

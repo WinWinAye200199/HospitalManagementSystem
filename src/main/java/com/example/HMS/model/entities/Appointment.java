@@ -2,6 +2,7 @@ package com.example.HMS.model.entities;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,8 +29,11 @@ public class Appointment {
     private Doctor doctor;
 
     private LocalDateTime dateTime;
-    private boolean isConfirmed;
-    private boolean isCancelled;
+    @Column(nullable = true)
+    private Boolean isConfirmed;
+
+    @Column(nullable = true)
+    private Boolean isCancelled;
     
     public boolean isConfirmed() {
         return isConfirmed;
@@ -37,5 +41,13 @@ public class Appointment {
 
     public void setConfirmed(boolean confirmed) {
         this.isConfirmed = confirmed;
+    }
+    
+    public boolean isCancelled() {
+        return isCancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.isCancelled = cancelled;
     }
 }

@@ -22,6 +22,7 @@ import com.example.HMS.model.response.AppointmentResposne;
 import com.example.HMS.model.response.DoctorInfoResponse;
 import com.example.HMS.model.response.DoctorResponse;
 import com.example.HMS.model.response.DoctorScheduleResponse;
+import com.example.HMS.model.response.UserInfoResponse;
 import com.example.HMS.model.response.UserResponse;
 import com.example.HMS.repository.AppointmentRepository;
 import com.example.HMS.repository.DepartmentRepository;
@@ -100,8 +101,8 @@ public class DoctorServiceImpl implements DoctorService{
 		            doc.getId(),
 		            user.isActive(),
 		            user.getName(),
-		            user.getAddress(),
 		            user.getEmail(),
+		            user.getAddress(),
 		            user.getPhone(),
 		            doc.getSpecialization(),
 		            departmentName,
@@ -145,20 +146,6 @@ public class DoctorServiceImpl implements DoctorService{
 		throw new NotFoundException("User not Found!");
 	}
 
-	@Override
-	public DoctorInfoResponse getDoctorInfo(UserPrincipal currentUser) {
-		
-		Doctor doctor = doctorRepository.findByUserId(currentUser.getId());
-		DoctorInfoResponse response = new DoctorInfoResponse();
-		response.setId(doctor.getId());
-		response.setName(doctor.getUser().getName());
-		response.setEmail(doctor.getUser().getEmail());
-		response.setPhone(doctor.getUser().getPhone());
-		response.setAddress(doctor.getUser().getAddress());
-		response.setDepartmentName(doctor.getDepartment().getName());
-		response.setSpecialization(doctor.getSpecialization());
-		return response;
-	}
 
 	@Override
 	public List<DoctorScheduleResponse> getAllDoctorSchedules(UserPrincipal currentUser) {
@@ -188,7 +175,7 @@ public class DoctorServiceImpl implements DoctorService{
 		List<AppointmentResposne> responses = new ArrayList<>();
 		
 		for(Appointment appointment : appointments) {
-			if(appointment.isCancelled() == false && appointment.isConfirmed() == false) {
+//			if(appointment.isCancelled() == false && appointment.isConfirmed() == false) {
 				AppointmentResposne response = new AppointmentResposne();
 				response.setId(appointment.getId());
 				response.setDoctorName(doctor.getUser().getName());
@@ -198,7 +185,29 @@ public class DoctorServiceImpl implements DoctorService{
 				response.setCancelled(false);
 				
 				responses.add(response);
-			}
+//			}
+		}
+		return responses;
+	}
+
+	@Override
+	public List<DoctorInfoDTO> getDoctorsWithDepartment(String department) {
+		Department foundDepartment = departmentRepository.findByName(department);
+		List<Doctor> doctors = doctorRepository.findByDepartmentId(foundDepartment.getId());
+		List<DoctorInfoDTO> responses = new ArrayList<>();
+		for(Doctor doctor : doctors) {
+			DoctorInfoDTO response = new DoctorInfoDTO();
+			response.setDoctorId(doctor.getId());
+			response.setFullName(doctor.getUser().getName());
+			response.setEmail(doctor.getUser().getEmail());
+			response.setAddress(doctor.getUser().getAddress());
+			response.setPhone(doctor.getUser().getPhone());
+			response.setSpecialization(doctor.getSpecialization());
+			response.setDepartment(doctor.getDepartment().getName());
+			response.setAssignedNurse(doctor.getAssignedNurse().getUser().getName());
+			response.setActive(doctor.getUser().isActive());
+			
+			responses.add(response);
 		}
 		return responses;
 	}

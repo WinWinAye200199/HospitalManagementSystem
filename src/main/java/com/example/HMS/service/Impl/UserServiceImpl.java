@@ -18,6 +18,8 @@ import com.example.HMS.model.entities.User;
 import com.example.HMS.model.request.UserRequest;
 import com.example.HMS.model.response.ApiResponse;
 import com.example.HMS.model.response.AppointmentResposne;
+import com.example.HMS.model.response.DoctorInfoResponse;
+import com.example.HMS.model.response.UserInfoResponse;
 import com.example.HMS.repository.AppointmentRepository;
 import com.example.HMS.repository.DoctorRepository;
 import com.example.HMS.repository.UserRepository;
@@ -85,9 +87,65 @@ public class UserServiceImpl implements UserService{
         return userRepository.findByEmail(email);
     }
     
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserInfoResponse> getAllUsers() {
+    	List<User> users = userRepository.findAll();
+    	List<UserInfoResponse> responses = new ArrayList<>();
+    	for(User user : users) {
+    		if(user.getRole().equals(Role.DOCTOR)) {
+    			UserInfoResponse response = new UserInfoResponse();
+    			response.setId(user.getId());
+    			response.setName(user.getName());
+    			response.setEmail(user.getEmail());
+    			response.setAddress(user.getAddress());
+    			response.setPhone(user.getPhone());
+    			
+    			Doctor doctor = doctorRepository.findByUserId(user.getId());
+    			response.setSpecialization(doctor.getSpecialization());
+    			response.setDepartment(doctor.getDepartment().getName());
+    			
+    			response.setRole(user.getRole().toString());
+    			response.setActive(user.isActive());
+    			
+    			responses.add(response);
+    			
+    		}else {
+    			UserInfoResponse response = new UserInfoResponse();
+    			response.setId(user.getId());
+    			response.setName(user.getName());
+    			response.setEmail(user.getEmail());
+    			response.setAddress(user.getAddress());
+    			response.setPhone(user.getPhone());
+    			response.setRole(user.getRole().toString());
+    			response.setActive(user.isActive());
+    			
+    			responses.add(response);
+    		}
+    	}
+        return responses;
     }
+    
+    @Override
+	public UserInfoResponse getDoctorInfo(UserPrincipal currentUser) {
+		
+		User user = userRepository.findById(currentUser.getId())
+				.orElseThrow(() -> new NotFoundException("User not found with ID: " + currentUser.getId()));
+		
+		UserInfoResponse response = new UserInfoResponse();
+		response.setId(user.getId());
+		response.setName(user.getName());
+		response.setEmail(user.getEmail());
+		response.setPhone(user.getPhone());
+		response.setAddress(user.getAddress());
+		response.setRole(user.getRole().toString());
+		response.setActive(user.isActive());
+		if(user.getRole() == Role.DOCTOR) {
+			Doctor doctor = doctorRepository.findByUserId(user.getId());
+			response.setDepartment(doctor.getDepartment().getName());
+			response.setSpecialization(doctor.getSpecialization());
+		}
+		
+		return response;
+	}
     
     
     
@@ -135,7 +193,9 @@ public class UserServiceImpl implements UserService{
 		
 		for(Appointment appointment : appointments) {
 			
-				Doctor doctor = doctorRepository.findByUserId(appointment.getDoctor().getId());
+				Doctor doctor = doctorRepository.findById(appointment.getDoctor().getId()).orElseThrow(
+						() -> new BadRequestException("Username Not Found : username -> " + currentUser.getUsername()));
+				
 				AppointmentResposne response = new AppointmentResposne();
 				response.setId(appointment.getId());
 				response.setDoctorName(doctor.getUser().getName());

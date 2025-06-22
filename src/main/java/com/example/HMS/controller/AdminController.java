@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.HMS.dto.DoctorInfoDTO;
@@ -22,7 +23,12 @@ import com.example.HMS.model.request.DoctorScheduleRequest;
 import com.example.HMS.model.request.StaffRequest;
 import com.example.HMS.model.request.UpdateStaffRequest;
 import com.example.HMS.model.response.ApiResponse;
+import com.example.HMS.model.response.DepartmentResponse;
+import com.example.HMS.model.response.DoctorInfoResponse;
 import com.example.HMS.model.response.DoctorScheduleResponse;
+import com.example.HMS.model.response.UserInfoResponse;
+import com.example.HMS.security.CurrentUser;
+import com.example.HMS.security.UserPrincipal;
 import com.example.HMS.service.AdminService;
 import com.example.HMS.service.DepartmentService;
 import com.example.HMS.service.DoctorScheduleService;
@@ -78,11 +84,38 @@ public class AdminController {
 		
 	}
 	
+	@GetMapping("/getMyProfile")
+	public UserInfoResponse getDoctorInfo(@CurrentUser UserPrincipal currentUser) {
+		UserInfoResponse response = userService.getDoctorInfo(currentUser);
+		return response;
+	}// need to rewrite
+	
+	@PostMapping("/addDepartment")
+	public ApiResponse saveDepartment(@RequestBody DepartmentRequest request) {
+		
+		ApiResponse apiResponse = departmentService.saveDepartment(request);
+		
+		return apiResponse;
+	}
+	
+	@GetMapping("/allDepartments")
+	public List<DepartmentResponse> getAllDepartments(){
+		
+		List<DepartmentResponse> responses = departmentService.getAllDepartments();
+		return responses;
+	}
+	
 	@GetMapping("/doctors")
 	public List<DoctorInfoDTO> getAllDoctors(){
 		List<DoctorInfoDTO> doctors = doctorService.getAllDoctors();
 		
 		return doctors;
+	}
+	
+	@GetMapping("/doctorsWithDepartment")
+	public List<DoctorInfoDTO> getDoctorsWithDepartment(@RequestParam String department){
+		List<DoctorInfoDTO> responses = doctorService.getDoctorsWithDepartment(department);
+		return responses;
 	}
 	
 	@GetMapping("/nurses")
@@ -102,6 +135,12 @@ public class AdminController {
 	public List<UserDto> getAllPatients(){
 		List<UserDto> patients = userService.getAllPatients();
 		return patients;
+	}
+	
+	@GetMapping("/getAllUsers")
+	public List<UserInfoResponse> getAllUsers(){
+		List<UserInfoResponse> responses = userService.getAllUsers();
+		return responses;
 	}
 	
 	@PutMapping("/assignedNurse/{id}")

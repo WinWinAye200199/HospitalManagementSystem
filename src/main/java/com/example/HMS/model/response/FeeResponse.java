@@ -6,6 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FeeResponse {
+	
+	private long id;
+	
 	private String name;        // e.g., "Doctor Consultation"
 
     private Double amount;      // e.g., 50.00

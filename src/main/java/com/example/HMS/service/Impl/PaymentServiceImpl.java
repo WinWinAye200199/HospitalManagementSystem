@@ -65,7 +65,12 @@ public class PaymentServiceImpl implements PaymentService {
     		PaymentResponse response = new PaymentResponse();
     		response.setId(payment.getId());
     		response.setPatientName(payment.getPatient().getName());
-    		response.setPaymentDate(payment.getPaymentDate().toString());
+    		 // ✅ Null check for paymentDate
+    	    if (payment.getPaymentDate() != null) {
+    	        response.setPaymentDate(payment.getPaymentDate().toString());
+    	    } else {
+    	        response.setPaymentDate("N/A"); // or null, or some default value
+    	    }
     		response.setMethod(payment.getMethod());
     		response.setAmount(payment.getTotalAmount());
     		
@@ -83,7 +88,12 @@ public class PaymentServiceImpl implements PaymentService {
     		PaymentResponse response = new PaymentResponse();
     		response.setId(payment.getId());
     		response.setPatientName(payment.getPatient().getName());
-    		response.setPaymentDate(payment.getPaymentDate().toString());
+    		 // ✅ Null check for paymentDate
+    	    if (payment.getPaymentDate() != null) {
+    	        response.setPaymentDate(payment.getPaymentDate().toString());
+    	    } else {
+    	        response.setPaymentDate("N/A"); // or null, or some default value
+    	    }
     		response.setMethod(payment.getMethod());
     		response.setAmount(payment.getTotalAmount());
     		
