@@ -181,8 +181,8 @@ public class DoctorServiceImpl implements DoctorService{
 				response.setDoctorName(doctor.getUser().getName());
 				response.setPatientName(appointment.getPatient().getName());
 				response.setDateTime(appointment.getDateTime().toString());
-				response.setConfirmed(false);
-				response.setCancelled(false);
+				response.setConfirmed(appointment.isConfirmed());
+				response.setCancelled(appointment.isCancelled());
 				
 				responses.add(response);
 //			}
